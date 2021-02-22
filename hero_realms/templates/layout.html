@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hero Realms {{ title }}</title>
+</head>
+<body>
+    <div align="center" style="margin-top: 50px; margin-bottom: 100px">
+        <img src="{{ url_for('static', filename='header.png') }}">
+    </div>
+
+    {% block content %}{% endblock %}
+
+</body>
+</html>
