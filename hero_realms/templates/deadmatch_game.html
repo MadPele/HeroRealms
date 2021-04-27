@@ -13,24 +13,28 @@
                 <tr>
                     <th style="color: green">Life</th>
                     <th class="life"></th>
-                    <th><input id="life_input" type="number" style="width: 35px"></th>
+                    <th><input class="life_input" type="number" style="width: 35px"></th>
                     <th style="width: 10px"></th>
                 </tr>
                 <tr>
                     <th style="color: goldenrod">Gold</th>
                     <th class="gold"></th>
-                    <th><input id="gold_input" type="number" style="width: 35px"></th>
+                    <th><input class="gold_input" type="number" style="width: 35px"></th>
                 </tr>
                 <tr>
                     <th style="color: red">Damage</th>
                     <th class="damage"></th>
-                    <th><input id="damage_input" type="number" style="width: 35px"></th>
+                    <th><input class="damage_input" type="number" style="width: 35px"></th>
                 </tr>
                 <tr style="height: 10px"></tr>
             </table>
         {% endfor %}
     </div>
-    <button id="end_round" value="End round">End round</button>
+    <div style="text-align: center; margin-top: 20px" id="buttons">
+        <button style="margin-right: 10px" id="action" value="Action">Action</button>
+        <button id="end_round" value="End round">End round</button>
+    </div>
+
     <script>
     setTimeout(function (){
         document.getElementById('title').style.visibility = "hidden"
@@ -61,14 +65,43 @@
     document.getElementById(players[id_player].name).style.border = '3px solid #30799B'
     console.log(document.getElementById(players[id_player].name))
 
+    let actionEvent = function (){
+        for (id_nr in players) {
+            let player_table = document.getElementById(players[id_nr].name)
+            if (player_table.getElementsByClassName('life_input')[0].value){
+                player_table.getElementsByClassName('life')[0].innerHTML =
+                    parseInt(player_table.getElementsByClassName('life')[0].innerHTML) +
+                    parseInt(player_table.getElementsByClassName('life_input')[0].value)
+                player_table.getElementsByClassName('life_input')[0].value = ''
+            }
+            if (player_table.getElementsByClassName('gold_input')[0].value){
+                player_table.getElementsByClassName('gold')[0].innerHTML =
+                    parseInt(player_table.getElementsByClassName('gold')[0].innerHTML) +
+                    parseInt(player_table.getElementsByClassName('gold_input')[0].value)
+                player_table.getElementsByClassName('gold_input')[0].value = ''
+            }
+            if (player_table.getElementsByClassName('damage_input')[0].value){
+                player_table.getElementsByClassName('damage')[0].innerHTML =
+                    parseInt(player_table.getElementsByClassName('damage')[0].innerHTML) +
+                    parseInt(player_table.getElementsByClassName('damage_input')[0].value)
+                player_table.getElementsByClassName('damage_input')[0].value = ''
+            }
+        }
+    }
+
+    let actionBtn = document.getElementById('action')
+    actionBtn.addEventListener('click', actionEvent)
+
     let endBtn = document.getElementById('end_round')
     endBtn.addEventListener('click', function (){
         let player_table = document.getElementById(players[id_player].name)
+        actionEvent()
         players[id_player].damage = 0
         players[id_player].gold = 0
         player_table.getElementsByClassName('gold')[0].innerHTML = players[id_player].gold
         player_table.getElementsByClassName('damage')[0].innerHTML = players[id_player].damage
         document.getElementById(players[id_player].name).style.border = '0px solid #30799B'
+
 
         if (id_player<players.length-1){
             id_player += 1
