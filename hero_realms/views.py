@@ -38,7 +38,6 @@ def deadmatch_setup_step2():
 
 @app.route('/deadmatch_game', methods=['POST', 'GET'])
 def deadmatch_game():
-    print('im here')
     players_name = []
     try:
         for i in range(1, 8):

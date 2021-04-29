@@ -6,7 +6,7 @@
 </head>
 <body style="background-color: #cccccc">
     <div align="center" style="margin-top: 50px; margin-bottom: 100px">
-        <img src="{{ url_for('static', filename='header.png') }}">
+        <img src="{{ url_for('static', filename='header.png') }}" style="max-width: 30%; max-height: 30%">
     </div>
 
     {% block content %}{% endblock %}
