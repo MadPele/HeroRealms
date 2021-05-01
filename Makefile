@@ -1,7 +1,7 @@
 help:
 	cat help.txt
 deps:
-	pip install -r requierments.txt
+	pip install -r requirements.txt
 
 run:
 	python3 main.py
