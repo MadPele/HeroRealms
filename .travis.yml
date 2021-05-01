@@ -6,4 +6,4 @@ services:
 install:
   - make deps
 script:
-  - make run
+  - make help
