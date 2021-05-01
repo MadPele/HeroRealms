@@ -1,0 +1,2 @@
+run - make run project
+deps - install all requirements

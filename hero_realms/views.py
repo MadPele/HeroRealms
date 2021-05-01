@@ -14,7 +14,6 @@ def deadmatch_setup_step1():
     return render_template('deadmatch_setup_step1.html')
 
 
-# @app.route('/deadmatch_setup_step2', defaults={'players_number': 3}, methods=['POST', 'GET'])
 @app.route('/deadmatch_setup_step2', methods=['POST', 'GET'])
 def deadmatch_setup_step2():
     if request.method == 'POST':
