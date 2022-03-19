@@ -1,0 +1,18 @@
+{% extends 'layout.html' %}
+{% block content %}
+    <h1 style="text-align: center">Setting new board</h1>
+    <div style="margin-left: 30px; font-size: large; display: inline-block">
+        How many players will be?
+    </div>
+    <div style="display: inline-block; margin-left: 20px">
+        <form action="http://127.0.0.1:5000/deadmatch_setup_step2" method="post">
+            <input type="number" name="players_number" max="8" min="2">
+            <input type="submit" value="Send">
+        </form>
+
+    </div>
+    <script>
+        console.log('Hello')
+    </script>
+
+{% endblock content %}

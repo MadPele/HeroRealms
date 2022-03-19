@@ -1,0 +1,156 @@
+{% extends 'layout.html' %}
+{% block content %}
+    <h1 id="title" style="text-align: center">Good luck and have fun!</h1>
+    <div id="board" style="text-align: center">
+
+        {% for player in players_name %}
+            <table class="players" id="{{ player }}" style="display: inline-block; margin-right: 50px; font-size: 20px;
+                border: 0px solid #30799B">
+                <tr>
+                    <th></th>
+                    <th class="name" style="height: 50px; font-style: italic"></th>
+                </tr>
+                <tr>
+                    <th style="color: green">Life</th>
+                    <th class="life"></th>
+                    <th><input class="life_input" type="number" style="width: 35px"></th>
+                    <th style="width: 10px"></th>
+                </tr>
+                <tr>
+                    <th style="color: goldenrod">Gold</th>
+                    <th class="gold"></th>
+                    <th><input class="gold_input" type="number" style="width: 35px"></th>
+                </tr>
+                <tr>
+                    <th style="color: red">Damage</th>
+                    <th class="damage"></th>
+                    <th><input class="damage_input" type="number" style="width: 35px"></th>
+                </tr>
+                <tr style="height: 10px"></tr>
+            </table>
+        {% endfor %}
+    </div>
+    <form action="http://127.0.0.1:5000/home" method="get">
+            <input type="submit" value="Home">
+    </form>
+    <div style="text-align: center; margin-top: 20px" id="buttons">
+        <button style="margin-right: 10px" id="action" value="Action">Action</button>
+        <button id="end_round" value="End round">End round</button>
+    </div>
+    <button style="text-align: right" id="next_game" value="Next game">Next game</button>
+
+    <script>
+    setTimeout(function (){
+        document.getElementById('title').style.visibility = "hidden"
+    }, 5000)
+
+    let Player = function (name) {
+        this.name = name
+        this.gold = 7
+        this.life = 50
+        this.damage = 0
+        this.dead = false
+    }
+
+    let players = []
+    let players_name = document.getElementsByClassName('players')
+    for (let id_nr in players_name) {
+        if (players_name[id_nr].id !== undefined){
+            players.push(new Player(players_name[id_nr].id))
+            let player_table = document.getElementById(players_name[id_nr].id)
+            player_table.getElementsByClassName('name')[0].innerHTML = players[players.length-1].name
+            player_table.getElementsByClassName('life')[0].innerHTML = players[players.length-1].life
+            player_table.getElementsByClassName('gold')[0].innerHTML = players[players.length-1].gold
+            player_table.getElementsByClassName('damage')[0].innerHTML = players[players.length-1].damage
+
+        }
+    }
+
+    let win_check = function(){
+        let winner = []
+         for (id in players){
+             if (players[id].dead === false){
+                 winner.push(id)
+             }
+         }
+         if(winner.length === 1){
+             return winner[0]
+         }
+         else return false
+    }
+
+    let id_player = 0
+    document.getElementById(players[id_player].name).style.border = '3px solid #30799B'
+    console.log(document.getElementById(players[id_player].name))
+
+    let actionEvent = function (){
+        for (id_nr in players) {
+            let player_table = document.getElementById(players[id_nr].name)
+            if (player_table.getElementsByClassName('life_input')[0].value){
+                player_table.getElementsByClassName('life')[0].innerHTML =
+                    parseInt(player_table.getElementsByClassName('life')[0].innerHTML) +
+                    parseInt(player_table.getElementsByClassName('life_input')[0].value)
+                player_table.getElementsByClassName('life_input')[0].value = ''
+            }
+            if (player_table.getElementsByClassName('gold_input')[0].value){
+                player_table.getElementsByClassName('gold')[0].innerHTML =
+                    parseInt(player_table.getElementsByClassName('gold')[0].innerHTML) +
+                    parseInt(player_table.getElementsByClassName('gold_input')[0].value)
+                player_table.getElementsByClassName('gold_input')[0].value = ''
+            }
+            if (player_table.getElementsByClassName('damage_input')[0].value){
+                player_table.getElementsByClassName('damage')[0].innerHTML =
+                    parseInt(player_table.getElementsByClassName('damage')[0].innerHTML) +
+                    parseInt(player_table.getElementsByClassName('damage_input')[0].value)
+                player_table.getElementsByClassName('damage_input')[0].value = ''
+            }
+            if (parseInt(player_table.getElementsByClassName('life')[0].innerHTML) < 1){
+                players[id_nr].dead = true
+                player_table.getElementsByClassName('name')[0].innerHTML = "Corpses of: " + players[id_nr].name
+                player_table.getElementsByClassName('name')[0].style.color = "red"
+            }
+
+        }
+        if (win_check()){
+            document.getElementById('title').innerHTML = players[win_check()].name + " is a WINNER !!!"
+            document.getElementById('title').style.visibility = "visible"
+        }
+    }
+
+    let actionBtn = document.getElementById('action')
+    actionBtn.addEventListener('click', actionEvent)
+
+    let next_player = function (id_player){
+        do {
+            if (id_player<players.length-1){
+            id_player += 1
+            }
+            else{
+                id_player = 0
+            }
+        }
+        while (players[id_player].dead === true)
+        return id_player
+    }
+
+    let endBtn = document.getElementById('end_round')
+    endBtn.addEventListener('click', function (){
+        let player_table = document.getElementById(players[id_player].name)
+        actionEvent()
+        players[id_player].damage = 0
+        players[id_player].gold = 0
+        player_table.getElementsByClassName('gold')[0].innerHTML = players[id_player].gold
+        player_table.getElementsByClassName('damage')[0].innerHTML = players[id_player].damage
+        document.getElementById(players[id_player].name).style.border = '0px solid #30799B'
+
+        id_player = next_player(id_player)
+        document.getElementById(players[id_player].name).style.border = '3px solid #30799B'
+    })
+
+    document.getElementById("next_game").addEventListener('click', function (){
+        window.location.reload(true)
+    })
+
+
+    </script>
+{% endblock content %}
